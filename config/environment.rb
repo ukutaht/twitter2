@@ -1,3 +1,5 @@
+require 'rspec/core/rake_task'
+
 # Set up gems listed in the Gemfile.
 # See: http://gembundler.com/bundler_setup.html
 #      http://stackoverflow.com/questions/7243486/why-do-you-need-require-bundler-setup
