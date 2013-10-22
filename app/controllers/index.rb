@@ -15,11 +15,30 @@ end
 get '/auth' do
   # the `request_token` method is defined in `app/helpers/oauth.rb`
   @access_token = request_token.get_access_token(:oauth_verifier => params[:oauth_verifier])
+
   # our request token is only valid until we use it to get an access token, so let's delete it from our session
   session.delete(:request_token)
 
   # at this point in the code is where you'll need to create your user account and store the access token
+  User.find_or_create_by_username(username: @access_token.params[:screen_name], 
+    oauth_token: @access_token.params[:oauth_token],
+    oauth_secret: @access_token.params[:oauth_token_secret] )
+  
+  session[:user_id] = @bananan.id
 
   erb :index
   
+end
+
+
+
+post '/tweet' do
+  @bananan = User.find(session[:user_id])
+
+  client = Twitter.configure do |config|
+    config.oauth_token = @bananan.oauth_token
+    config.oauth_token_secret = @bananan.oauth_secret
+  end
+
+  client.update(params[:jonsdecision])
 end
