@@ -1,17 +1,26 @@
 $(document).ready(function() {
- $('#tweetbox').on('submit', function(event){
-  event.preventDefault();
+  var job_id = false;
+  function checkStatus(){
+    $.get("/status/" + job_id, function(response){
+      if(response == "true"){
+        $('#pending').toggle();
+        alert("Your Tweet was sent, dude");
+        clearInterval(interval);
+      }
+    });
+  }
+
+ var interval =  setInterval(function(){checkStatus()}, 2000);
+
+  $('#tweetbox').on('submit', function(event){
+    event.preventDefault();
     $('#tweet').prop('disabled', true);
     $('#submit').prop('disabled', true);
-  var data = {jonsdecision : $('#tweet').val()};
-    $('h1').append("<div id='proccessed'><li>Your Post is being proccessed</li></div>")
-  $.post('/tweet', data, function(){
-  })
-  .fail(function(){
-  $('#proccessed').replaceWith("<div id='failed'><li>Tweet failed!</li></div>")
-  })
-  .done(function(){
-  $('#proccessed').replaceWith("<div id='complete'><li>Tweet's been tweeted</li></div>")
-  })
- })
+    var data = {jonsdecision : $('#tweet').val(), time : $('#time').val() };
+    $.post('/tweet', data, function(response){
+      $('#submit').replaceWith("<div id='pending'><h5>Your Post is Pending</h5></div>")
+      job_id = response;
+    });
+  });
 });
+
