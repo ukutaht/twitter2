@@ -1,5 +1,5 @@
 require 'rake'
-require 'rspec/core/rake_task'
+#   require 'rspec/core/rake_task'
 
 
 require ::File.expand_path('../config/environment', __FILE__)
@@ -8,6 +8,7 @@ require ::File.expand_path('../config/environment', __FILE__)
 require 'active_support/core_ext'
 
 namespace :generate do
+
   desc "Create an empty model in app/models, e.g., rake generate:model NAME=User"
   task :model do
     unless ENV.has_key?('NAME')
@@ -124,6 +125,6 @@ task "console" do
 end
 
 desc "Run the specs"
-RSpec::Core::RakeTask.new(:spec)
+# RSpec::Core::RakeTask.new(:spec)
 
 task :default  => :specs
